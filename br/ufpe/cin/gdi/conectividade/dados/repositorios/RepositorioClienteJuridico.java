@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+
+
 import br.ufpe.cin.gdi.conectividade.dados.entidades.ClienteJuridico;
 import br.ufpe.cin.gdi.conectividade.dados.entidades.Endereco;
-
-
 
 public class RepositorioClienteJuridico {
 	private Connection con;
@@ -24,11 +24,11 @@ public class RepositorioClienteJuridico {
 		
 		ResultSet rs;
 		
-		Vector<ClienteJuridico> clientesJ = new Vector<ClienteJuridico>();
-		
-		String query = "SELECT cj.*, cj.patrocinador.cadastro AS patrocinador,cj.endereco.CEP AS CEP, cj.endereco.logradouro AS logradouro, cj.endereco.numero AS numero, cj.endereco.complemento AS complemento, cj.endereco.bairro AS bairro, cj.endereco.cidade AS cidade, cj.endereco.bairro.estado FROM tb_c_fisico cj";
+		String query = "SELECT cj.*, cj.patrocinador.cadastro AS patrocinador,cj.endereco.CEP AS CEP, cj.endereco.logradouro AS logradouro, cj.endereco.numero AS numero, cj.endereco.complemento AS complemento, cj.endereco.bairro AS bairro, cj.endereco.cidade AS cidade, cj.endereco.bairro.estado FROM tb_c_juridica cj";
 		
 		rs = st.executeQuery(query);
+		
+		Vector<ClienteJuridico> clientesJ = new Vector<ClienteJuridico>();
 		
 		String razao_social;
 		String CNPJ;
@@ -37,15 +37,7 @@ public class RepositorioClienteJuridico {
         String nome;
         String email;
         
-        String CEP;
-        String logradouro;
-        String numero;
-        String complemento;
-        String bairro;
-        String cidade;
-        String estado;
-        
-        String telefone;
+        String CEP, logradouro, numero, complemento, bairro, cidade, estado;
         
         Endereco  endereco;
         
@@ -72,6 +64,7 @@ public class RepositorioClienteJuridico {
 			estado = rs.getString("estado");
 			
 			rs2 = rs.getArray("telefone").getResultSet();
+			
 			while(rs2.next()){
 				telefones.add(rs2.getString(2));
 				
@@ -83,8 +76,49 @@ public class RepositorioClienteJuridico {
 			
 			
 		}
+		
 		return clientesJ;
 	}
+	
+	public void inserirClienteJ(ClienteJuridico cj) throws SQLException{
+		
+		Statement st = con.createStatement();
+		
+		String endereco = "tp_endereco('" + cj.getEndereco().getCEP() + "', '" + cj.getEndereco().getLogradouro() + "', '" + cj.getEndereco().getComplemento() + "', '" + cj.getEndereco().getNumero() + "', '" + cj.getEndereco().getBairro() + "', '" + cj.getEndereco().getCidade() + "', '" + cj.getEndereco().getEstado() + "')";
+		
+		String telefones = "v_telefone(";
+		
+		for (int i = 0; i < cj.getTelefones().size(); i++) {
+			telefones = telefones + "tp_telefone('" + cj.getTelefones().elementAt(i) + "')";
+			
+			if(!(cj.getTelefones().size()-1 == i)){
+				telefones = telefones + ", ";
+			}
+		}
+		
+		telefones = telefones + ")";
+		
+		String patrocinador = "SELECT REF(c) FROM tb_c_juridica c WHERE c.cadastro = '" + cj.getPatrocinador() + "'";
+		
+		String sql = "INSERT INTO tb_c_juridica VALUES('" + cj.getCadastro() + "', '" + cj.getNome() + "', '" + cj.getEmail() + "', " + endereco + ", " +  telefones + ", (" + patrocinador + ")" + ", '"+ cj.getCNPJ() + "', '" + cj.getRazaoSocial() + "')";
+		
+		st.executeUpdate(sql);
+		
+		st.close();
+		con.commit();
+		
+	}
+	
+	   public void removerClienteJuridico(ClienteJuridico cj) throws SQLException {
+           
+           Statement st = con.createStatement();
+           String sql = "DELETE FROM tb_c_juridica WHERE cadastro = '" + cj.getCadastro() + "'";
+           st.executeUpdate(sql);
+           con.commit();
+           st.close();
+   }
+	
+	
 	
 }
 
