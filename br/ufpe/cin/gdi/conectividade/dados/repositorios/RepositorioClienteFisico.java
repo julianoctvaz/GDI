@@ -9,8 +9,6 @@ import java.util.Vector;
 import br.ufpe.cin.gdi.conectividade.dados.entidades.ClienteFisico;
 import br.ufpe.cin.gdi.conectividade.dados.entidades.Endereco;
 
-
-
 public class RepositorioClienteFisico {
 	private Connection con;
 	
@@ -39,15 +37,7 @@ public class RepositorioClienteFisico {
 		String sexo;
 		String RG;
 		
-		String CEP;
-        String logradouro;
-        String numero;
-        String complemento;
-        String bairro;
-        String cidade;
-        String estado;
-        
-        String telefone;
+		String CEP, logradouro, numero, complemento, bairro, cidade, estado;
         
         Endereco  endereco;
         
@@ -90,6 +80,44 @@ public class RepositorioClienteFisico {
 		}
 		return clientesF;
 	}
+	
+	public void inserirClienteF(ClienteFisico cf) throws SQLException{
+		
+		Statement st = con.createStatement();
+		
+		String endereco = "tp_endereco('" + cf.getEndereco().getCEP() + "', '" + cf.getEndereco().getLogradouro() + "', '" + cf.getEndereco().getComplemento() + "', '" + cf.getEndereco().getNumero() + "', '" + cf.getEndereco().getBairro() + "', '" + cf.getEndereco().getCidade() + "', '" + cf.getEndereco().getEstado() + "')";
+		
+		String telefones = "v_telefone(";
+		
+		for (int i = 0; i < cf.getTelefones().size(); i++) {
+			telefones = telefones + "tp_telefone('" + cf.getTelefones().elementAt(i) + "')";
+			
+			if(!(cf.getTelefones().size()-1 == i)){
+				telefones = telefones + ", ";
+			}
+		}
+		
+		telefones = telefones + ")";
+		
+		String patrocinador = "(SELECT REF(c) FROM tb_c_fisico c WHERE c.cadastro = '" + cf.getPatrocinador() + "')";
+		
+		String sql = "INSERT INTO tb_c_fisico VALUES('" + cf.getCadastro() + "', '" + cf.getNome() + "', '" + cf.getEmail() + "', " + endereco + ", " +  telefones + ", " + patrocinador + ", '" + cf.getCPF() + "', " + "to_date('"+cf.getData_nascimento()+"','dd/mm/yyyy'), '" + cf.getSexo() + "', '" + cf.getRG() + "')";
+		
+		st.executeUpdate(sql);
+		
+		st.close();
+		con.commit();
+		
+	}
+	
+	   public void removerClienteFisico(ClienteFisico cf) throws SQLException {
+           
+           Statement st = con.createStatement();
+           String sql = "DELETE FROM tb_c_fisico WHERE cadastro = '" + cf.getCadastro() + "'";
+           st.executeUpdate(sql);
+           con.commit();
+           st.close();
+   }
 	
 }
 
