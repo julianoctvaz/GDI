@@ -3,6 +3,7 @@ package br.ufpe.cin.gdi.conectividade.dados.repositorios;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
@@ -153,9 +154,7 @@ public class RepositorioFuncionario {
 
 		PreparedStatement ps = con.prepareStatement(sql);
 
-		@SuppressWarnings("resource")
-		InputStream in = (InputStream) new FileInputStream(funcionario
-				.getFoto().getFile());
+		InputStream in = (InputStream) new FileInputStream(funcionario.getFoto().getFile());
 
 		ps.setBinaryStream(1, in, funcionario.getFoto().getFile().length());
 
@@ -176,5 +175,22 @@ public class RepositorioFuncionario {
 
 		con.commit();
 	}
+	
+	public void setFoto(Imagem imagem, Funcionario f) throws SQLException, FileNotFoundException {
+		
+		String sql = "UPDATE tb_funcionario SET foto = ? WHERE cadastro='"+f.getCadastro()+"'";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		
+		InputStream in = (InputStream) new FileInputStream(imagem.getFile());
 
+		ps.setBinaryStream(1, in, imagem.getFile().length());
+		ps.executeUpdate();
+		
+		f.setFoto(imagem);
+		
+		ps.close();
+		con.commit();
+	}
+	
 }
