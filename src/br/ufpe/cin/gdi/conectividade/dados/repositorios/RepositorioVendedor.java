@@ -169,5 +169,22 @@ public class RepositorioVendedor {
 		st.close();
 	}
 	
+	public void setFoto(Imagem imagem, Vendedor v) throws SQLException, FileNotFoundException {
+		
+		String sql = "UPDATE tb_vendedor SET foto = ? WHERE cadastro='"+v.getCadastro()+"'";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		
+		InputStream in = (InputStream) new FileInputStream(imagem.getFile());
+
+		ps.setBinaryStream(1, in, imagem.getFile().length());
+		ps.executeUpdate();
+		
+		v.setFoto(imagem);
+		
+		ps.close();
+		con.commit();
+	}
+	
 }
 
