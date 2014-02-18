@@ -135,13 +135,15 @@ public class RepositorioMotocicleta {
 		ps.setBinaryStream(1, in, m.getImagem().getFile().length());
 		ps.executeUpdate();
 		
-		ps.close();	
+		ps.close();
+		con.commit();
 	}
 	
 	public void removerMoto(Motocicleta m) throws SQLException {
 		Statement st = con.createStatement();
 		st.executeUpdate("DELETE FROM tb_motocicleta WHERE codigo='"+m.getCodigo()+"'");
 		st.close();
+		con.commit();
 	}
 	
 }
