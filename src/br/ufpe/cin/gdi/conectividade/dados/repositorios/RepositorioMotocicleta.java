@@ -21,6 +21,7 @@ import br.ufpe.cin.gdi.conectividade.dados.entidades.Motocicleta;
 import br.ufpe.cin.gdi.conectividade.dados.entidades.Promocao;
 
 public class RepositorioMotocicleta {
+	
 	private Connection con;
 
 	public RepositorioMotocicleta(Connection con) {
@@ -34,7 +35,7 @@ public class RepositorioMotocicleta {
 		
 		Vector<Motocicleta> motos = new Vector<Motocicleta>();
 		
-		rs = st.executeQuery("SELECT m.* FROM tb_motocicleta");
+		rs = st.executeQuery("SELECT m.* FROM tb_motocicleta m");
 		st.close();
 		
 		String codigo, tempo_garantia;
@@ -143,6 +144,23 @@ public class RepositorioMotocicleta {
 		Statement st = con.createStatement();
 		st.executeUpdate("DELETE FROM tb_motocicleta WHERE codigo='"+m.getCodigo()+"'");
 		st.close();
+		con.commit();
+	}
+	
+	public void setFoto(Imagem imagem, Motocicleta m) throws SQLException, FileNotFoundException {
+		
+		String sql = "UPDATE tb_motocicleta SET foto = ? WHERE codigo='"+m.getCodigo()+"'";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		
+		InputStream in = (InputStream) new FileInputStream(imagem.getFile());
+
+		ps.setBinaryStream(1, in, imagem.getFile().length());
+		ps.executeUpdate();
+		
+		m.setImagem(imagem);
+		
+		ps.close();
 		con.commit();
 	}
 	
