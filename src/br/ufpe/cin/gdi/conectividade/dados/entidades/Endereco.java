@@ -3,16 +3,18 @@ package br.ufpe.cin.gdi.conectividade.dados.entidades;
 public class Endereco {
 	private String CEP;
 	private String logradouro;
+	private String numero;
 	private String complemento;
 	private String bairro;
 	private String cidade;
 	private String estado;
 	
-	public Endereco(String CEP, String logradouro, String complemento,
+	public Endereco(String CEP, String logradouro, String numero, String complemento,
 			String bairro, String cidade, String estado) {
 		
 		this.CEP = CEP;
 		this.logradouro = logradouro;
+		this.numero = numero;
 		this.complemento = complemento;
 		this.bairro = bairro;
 		this.cidade = cidade;
