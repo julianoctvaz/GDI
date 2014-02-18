@@ -37,11 +37,9 @@ public class RepositorioGerente {
 
 		Vector<Gerente> gerentes = new Vector<Gerente>();
 
-		String query = "SELECT g.*, g.endereco.CEP AS CEP, g.endereco.logradouro AS logradouro, g.endereco.numero AS numero, g.endereco.complemento AS complemento, g.endereco.bairro AS bairro, g.endereco.cidade AS cidade, g.endereco.bairro.estado FROM tb_vendedor g";
+		String query = "SELECT g.*, g.endereco.CEP AS CEP, g.endereco.logradouro AS logradouro, g.endereco.numero AS numero, g.endereco.complemento AS complemento, g.endereco.bairro AS bairro, g.endereco.cidade AS cidade, g.endereco.estado AS estado FROM tb_gerente g";
 
 		rs = st.executeQuery(query);
-
-		st.close();
 
 		ByteArrayInputStream in = null;
 		BufferedImage img = null;
@@ -89,7 +87,7 @@ public class RepositorioGerente {
 
 			rs2 = rs.getArray("telefone").getResultSet();
 			while(rs2.next()){
-				telefones.add(rs2.getString(2));
+				telefones.add(rs2.getString(1));
 			}
 
 			endereco = new Endereco(CEP, logradouro, numero, complemento, bairro, cidade, estado);
@@ -112,7 +110,9 @@ public class RepositorioGerente {
 
 			gerentes.add(gerente);	
 		}
-
+		
+		st.close();
+		
 		return gerentes;
 	}
 

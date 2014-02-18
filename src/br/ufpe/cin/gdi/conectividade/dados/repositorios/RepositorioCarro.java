@@ -36,8 +36,7 @@ public class RepositorioCarro {
 		Vector<Carro> motos = new Vector<Carro>();
 		
 		rs = st.executeQuery("SELECT c.* FROM tb_carro c");
-		st.close();
-		
+	
 		String codigo, tempo_garantia;
 		double valor;
 		
@@ -82,7 +81,6 @@ public class RepositorioCarro {
 			Vector<Promocao> lista_promocoes = new Vector<Promocao>();
 			
 			rset = stm.executeQuery("SELECT P.desconto AS desconto, TO_CHAR(P.periodo_validade) AS validade FROM tb_motocicleta M, TABLE(M.lista_promocoes) P");
-			stm.close();
 			
 			double desconto;
 			String validade;
@@ -92,6 +90,8 @@ public class RepositorioCarro {
 				validade = rset.getString("validade");
 				lista_promocoes.add(new Promocao(desconto, validade));
 			}
+			
+			stm.close();
 			
 			fotoBlob = rs.getBlob("foto");
 
@@ -107,6 +107,7 @@ public class RepositorioCarro {
 			
 			motos.add(c);
 		}
+		st.close();
 		
 		return motos;
 	}
