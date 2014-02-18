@@ -41,6 +41,7 @@ public class RepositorioFornecedor {
 		Statement st = con.createStatement();
 		st.executeUpdate("DELETE FROM tb_fornecedor WHERE cnpj='"+f.getCNPJ()+"'");
 		st.close();
+		con.commit();
 	}
 	
 	public void inserirFornecedor(Fornecedor f) throws SQLException {
@@ -50,6 +51,7 @@ public class RepositorioFornecedor {
 		Statement st = con.createStatement();
 		st.executeUpdate(sql);
 		st.close();
+		con.commit();
 	}
 	
 }
