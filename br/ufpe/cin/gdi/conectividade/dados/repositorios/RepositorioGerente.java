@@ -2,9 +2,13 @@ package br.ufpe.cin.gdi.conectividade.dados.repositorios;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,8 +21,8 @@ import br.ufpe.cin.gdi.conectividade.dados.entidades.Gerente;
 import br.ufpe.cin.gdi.conectividade.dados.entidades.Imagem;
 
 
-
 public class RepositorioGerente {
+	
 	private Connection con;
 	
 	public RepositorioGerente(Connection con){
@@ -37,6 +41,8 @@ public class RepositorioGerente {
 		
 		rs = st.executeQuery(query);
 		
+		st.close();
+		
 		ByteArrayInputStream in = null;
         BufferedImage img = null;
         Blob fotoBlob = null;
@@ -54,7 +60,6 @@ public class RepositorioGerente {
         String bairro;
         String cidade;
         String estado;
-        String telefone;
         
         Endereco  endereco;
       
@@ -85,7 +90,6 @@ public class RepositorioGerente {
 			rs2 = rs.getArray("telefone").getResultSet();
 			while(rs2.next()){
 				telefones.add(rs2.getString(2));
-				
 			}
 			
 			endereco = new Endereco(CEP, logradouro, numero, complemento, bairro, cidade, estado);
@@ -113,5 +117,55 @@ public class RepositorioGerente {
 		
 		return gerentes;
 	}
+	
+	public void inserirGerente(Gerente gerente) throws SQLException, FileNotFoundException {
+		
+		String cadastro = gerente.getCadastro();
+		String nome = gerente.getNome();
+		String email = gerente.getEmail();
+		
+		String CEP = gerente.getEndereco().getCEP();
+		String logradouro = gerente.getEndereco().getLogradouro();
+		String numero = gerente.getEndereco().getNumero();
+		String comp = gerente.getEndereco().getComplemento();
+		String bairro = gerente.getEndereco().getCidade();
+		String cidade = gerente.getEndereco().getBairro();
+		String estado = gerente.getEndereco().getEstado();
+		
+		String telefones = "v_telefone(";
+		for (int i = 0; i < gerente.getTelefones().size(); i++) {
+	
+			if (i > 0) {
+				telefones += ", ";
+			}			
+			telefones += "tp_telefone('" + gerente.getTelefones().elementAt(i) + "')";
+		}
+		telefones += ")";
+		
+		String login = gerente.getLogin();
+		String senha = gerente.getSenha();
+		String salario = gerente.getSalario() + "";
+		String objetivos = gerente.getObjetivos();
+		
+		String sql = "INSERT INTO tb_gerente VALUES ('"+cadastro+"', '"+nome+"', '"+email+"', tp_endereco('"+CEP+"', '"+logradouro+"', '"+numero+"', '"+comp+"', '"+bairro+"', '"+cidade+"', '"+estado+"'), "+telefones+", '"+login+"', '"+senha+"', "+salario+", ?,"+objetivos+");";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		
+		InputStream in = (InputStream) new FileInputStream(gerente.getFoto().getFile());
+		
+		ps.setBinaryStream(1, in, gerente.getFoto().getFile().length());
+		ps.executeUpdate();
+		
+		ps.close();
+		
+		con.commit();
+	}
+	
+	public void removerGerente(Gerente gerente) throws SQLException {
+		Statement st = con.createStatement();
+		String sql = "DELETE FROM tb_gerente WHERE cadastro='"+gerente.getCadastro()+"'";
+		st.executeUpdate(sql);
+		st.close();
+	}
+	
 }
-
