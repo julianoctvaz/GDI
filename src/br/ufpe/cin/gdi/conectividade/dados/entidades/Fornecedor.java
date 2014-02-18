@@ -6,9 +6,9 @@ public class Fornecedor {
 	private String nome;
 	private String tipo;
 	
-	public Fornecedor(String cNPJ, String nome, String tipo) {
+	public Fornecedor(String CNPJ, String nome, String tipo) {
 		super();
-		CNPJ = cNPJ;
+		this.CNPJ = CNPJ;
 		this.nome = nome;
 		this.tipo = tipo;
 	}
