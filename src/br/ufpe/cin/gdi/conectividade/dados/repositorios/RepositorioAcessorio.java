@@ -66,6 +66,7 @@ public class RepositorioAcessorio {
 		Statement st = con.createStatement();
 		st.executeUpdate("DELETE FROM tb_acessorio WHERE codigo='"+acc.getCodigo()+"'");
 		st.close();
+		con.commit();
 	}
 
 	public void inserirAcessorio(Acessorio acc) throws SQLException {
@@ -92,6 +93,7 @@ public class RepositorioAcessorio {
 		Statement st = con.createStatement();
 		st.executeUpdate(sql);
 		st.close();
+		con.commit();
 	}
 
 }
