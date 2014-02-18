@@ -21,6 +21,22 @@ public class Endereco {
 		this.estado = estado;
 	}
 
+	public String getCEP() {
+		return CEP;
+	}
+
+	public void setCEP(String cEP) {
+		CEP = cEP;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
 	public String getLogradouro() {
 		return logradouro;
 	}
