@@ -167,4 +167,21 @@ public class RepositorioGerente {
 		st.close();
 	}
 
+	public void setFoto(Imagem imagem, Gerente g) throws SQLException, FileNotFoundException {
+		
+		String sql = "UPDATE tb_gerente SET foto = ? WHERE cadastro='"+g.getCadastro()+"'";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		
+		InputStream in = (InputStream) new FileInputStream(imagem.getFile());
+
+		ps.setBinaryStream(1, in, imagem.getFile().length());
+		ps.executeUpdate();
+		
+		g.setFoto(imagem);
+		
+		ps.close();
+		con.commit();
+	}
+	
 }
