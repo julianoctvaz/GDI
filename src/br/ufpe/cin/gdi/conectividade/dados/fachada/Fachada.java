@@ -59,12 +59,12 @@ public class Fachada {
 		repFuncionario.setFoto(foto, f);
 	}
 
-	public Vector<Funcionario> exibirFuncionarios() throws SQLException,
-			IOException {
-		Vector<Funcionario> funcionarios = repFuncionario.getFuncionarios();
-		return funcionarios;
+	
+	public Vector<Gerente> getGerentes() throws SQLException, IOException {
+		Vector<Gerente> gerentes = repGerente.getGerentes();
+		return gerentes;
 	}
-
+	
 	public void cadastrarGerente(String cadastro, String nome, String email,
 			String CEP, String logradouro, String numero, String complemento,
 			String bairro, String cidade, String estado,
@@ -85,11 +85,6 @@ public class Fachada {
 	public void setFotoGerente(Imagem foto, Gerente g)
 			throws FileNotFoundException, SQLException {
 		repGerente.setFoto(foto, g);
-	}
-
-	public Vector<Vendedor> exibirVendedores() throws SQLException, IOException {
-		Vector<Vendedor> vendedores = repVendedor.getVendedores();
-		return vendedores;
 	}
 
 	public void cadastrarVendedor(String cadastro, String nome, String email,
@@ -119,6 +114,11 @@ public class Fachada {
 		return vendedores;
 	}
 
+	public Vector<Funcionario> getFuncionarios() throws SQLException, IOException {
+		Vector<Funcionario> funcionarios = repFuncionario.getFuncionarios();
+		return funcionarios;
+	}
+	
 	public void cadastrarCarro(String codigo, String tempo_garantia,
 			double valor, Vector<Promocao> promocoes, String chassi,
 			String estado, String cor, String modelo, String consumo,
@@ -170,4 +170,5 @@ public class Fachada {
 		Vector<Motocicleta> motos = repMotocicleta.getMotos();
 		return motos;
 	}
+	
 }
