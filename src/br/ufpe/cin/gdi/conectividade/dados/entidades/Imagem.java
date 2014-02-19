@@ -21,6 +21,11 @@ public class Imagem {
 		this.imagem = ImageIO.read(this.file);
 	}
 
+	public Imagem(File f) throws IOException {
+		this.file = f;
+		this.imagem = ImageIO.read(f);
+	}
+	
 	public BufferedImage getImagem() {
 		return imagem;
 	}
