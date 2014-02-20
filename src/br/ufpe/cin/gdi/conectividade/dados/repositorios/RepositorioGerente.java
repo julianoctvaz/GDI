@@ -145,7 +145,7 @@ public class RepositorioGerente {
 		String salario = gerente.getSalario() + "";
 		String objetivos = gerente.getObjetivos();
 
-		String sql = "INSERT INTO tb_gerente VALUES ('"+cadastro+"', '"+nome+"', '"+email+"', tp_endereco('"+CEP+"', '"+logradouro+"', '"+numero+"', '"+comp+"', '"+bairro+"', '"+cidade+"', '"+estado+"'), "+telefones+", '"+login+"', '"+senha+"', "+salario+", ?,"+objetivos+");";
+		String sql = "INSERT INTO tb_gerente VALUES ('"+cadastro+"', '"+nome+"', '"+email+"', tp_endereco('"+CEP+"', '"+logradouro+"', '"+numero+"', '"+comp+"', '"+bairro+"', '"+cidade+"', '"+estado+"'), "+telefones+", '"+login+"', '"+senha+"', "+salario+", ?,'"+objetivos+"')";
 
 		PreparedStatement ps = con.prepareStatement(sql);
 

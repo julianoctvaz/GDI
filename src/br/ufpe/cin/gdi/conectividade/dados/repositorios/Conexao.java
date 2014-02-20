@@ -46,7 +46,7 @@ public class Conexao {
 		return con;
 	}       
 
-	public static void main(String args[]) {
+	/*public static void main(String args[]) {
 		Conexao c = new Conexao();
 		
 		try {
@@ -108,7 +108,7 @@ public class Conexao {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-	}
+	}*/
 
 }
 

@@ -132,6 +132,7 @@ public class RepositorioCarro {
 			
 			promocoes += "tp_promocao("+desconto+", to_date('"+validade+"', 'dd/mm/yyyy'))";
 		}
+		promocoes += ")";
 		
 		String sql = "INSERT INTO tb_carro VALUES('"+codigo+"', '"+tempo_garantia+"', "+valor+", "+promocoes+", '"+chassi+"', '"+estado+"', '"+cor+"', '"+modelo+"', '"+consumo+"', '"+freios+"', '"+marca+"', '"+ano+"', '"+partida+"', '"+cilindradas+"', "+malas+", "+portas+", '"+motor+"', '"+combustivel+"', ?, '"+alarme+"', '"+cambio+"', '"+direcao+"', '"+air_bag+"', '"+ar_condicionado+"')";
 		

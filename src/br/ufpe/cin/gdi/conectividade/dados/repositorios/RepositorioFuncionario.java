@@ -150,10 +150,10 @@ public class RepositorioFuncionario {
 				+ logradouro + "', '" + numero + "', '" + comp + "', '"
 				+ bairro + "', '" + cidade + "', '" + estado + "'), "
 				+ telefones + ", '" + login + "', '" + senha + "', " + salario
-				+ ", ?))";
+				+ ", ?)";
 
 		PreparedStatement ps = con.prepareStatement(sql);
-
+		
 		InputStream in = (InputStream) new FileInputStream(funcionario.getFoto().getFile());
 
 		ps.setBinaryStream(1, in, funcionario.getFoto().getFile().length());
